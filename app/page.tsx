@@ -151,7 +151,7 @@ function HelpDialog({ onClose }: { onClose: () => void }) {
           information on the first clue to get it for sure, just make your best guess and
           you&rsquo;ll get another clue to help narrow things down!
         </p>
-        <p className="text-sm leading-relaxed text-muted">
+        <p className="mb-4 text-sm leading-relaxed text-muted">
           Heavily inspired by Doctordle.{' '}
           <a
             href="https://doctordle.org/doctordle/"
@@ -162,6 +162,34 @@ function HelpDialog({ onClose }: { onClose: () => void }) {
             https://doctordle.org/doctordle/
           </a>
         </p>
+
+        <div className="mt-4 border-t border-border pt-4 text-sm leading-relaxed">
+          <p>This game created by itsblunty.</p>
+          <p className="mt-2 text-muted">You can throw him a couple bucks here:</p>
+          <ul className="mt-1 space-y-1">
+            <li>
+              <a
+                href="https://www.patreon.com/itsblunty"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="text-blue-400 underline hover:text-blue-300"
+              >
+                https://www.patreon.com/itsblunty
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.paypal.com/ncp/payment/XCJU5LXMJTYBU"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="text-blue-400 underline hover:text-blue-300"
+              >
+                https://www.paypal.com/ncp/payment/XCJU5LXMJTYBU
+              </a>
+            </li>
+            <li className="text-gray-100">$itsblunty - CashApp</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
