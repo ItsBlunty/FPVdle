@@ -189,8 +189,7 @@ export default function HomePage() {
   if (error) {
     return (
       <main className="mx-auto max-w-2xl p-6">
-        <Header puzzleNumber={null} />
-        <HelpButton onClick={() => setShowHelp(true)} />
+        <Header puzzleNumber={null} onHelpClick={() => setShowHelp(true)} />
         <div className="rounded-lg border border-border bg-panel p-8 text-center text-muted">
           {error}
         </div>
@@ -202,8 +201,7 @@ export default function HomePage() {
   if (status === 'loading' || !puzzle) {
     return (
       <main className="mx-auto max-w-2xl p-6">
-        <Header puzzleNumber={null} />
-        <HelpButton onClick={() => setShowHelp(true)} />
+        <Header puzzleNumber={null} onHelpClick={() => setShowHelp(true)} />
         <div className="rounded-lg border border-border bg-panel p-8 text-center text-muted">
           Loading today's puzzle…
         </div>
@@ -217,8 +215,7 @@ export default function HomePage() {
 
   return (
     <main className="mx-auto max-w-2xl p-4 sm:p-6">
-      <Header puzzleNumber={puzzle.number} />
-      <HelpButton onClick={() => setShowHelp(true)} />
+      <Header puzzleNumber={puzzle.number} onHelpClick={() => setShowHelp(true)} />
 
       <div className="space-y-3">
         {visibleClues.map((c, i) => (
@@ -258,20 +255,6 @@ export default function HomePage() {
 
       {showHelp && <HelpDialog onClose={() => setShowHelp(false)} />}
     </main>
-  );
-}
-
-function HelpButton({ onClick }: { onClick: () => void }) {
-  return (
-    <div className="mb-5 flex justify-center">
-      <button
-        type="button"
-        onClick={onClick}
-        className="rounded-md border border-border bg-panel px-4 py-2 text-sm font-medium text-gray-100 hover:bg-panelAlt"
-      >
-        How Does This Game Work?
-      </button>
-    </div>
   );
 }
 
@@ -321,18 +304,31 @@ function HelpDialog({ onClose }: { onClose: () => void }) {
   );
 }
 
-function Header({ puzzleNumber }: { puzzleNumber: number | null }) {
+function Header({
+  puzzleNumber,
+  onHelpClick,
+}: {
+  puzzleNumber: number | null;
+  onHelpClick: () => void;
+}) {
   return (
-    <header className="mb-5 flex items-center justify-between">
-      <div>
+    <header className="mb-5 grid grid-cols-3 items-center gap-2">
+      <div className="justify-self-start">
         <h1 className="text-2xl font-bold tracking-tight text-white">FPVdle</h1>
         {puzzleNumber != null && (
           <div className="text-xs text-muted">Puzzle #{puzzleNumber}</div>
         )}
       </div>
+      <button
+        type="button"
+        onClick={onHelpClick}
+        className="justify-self-center rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-gray-100 hover:bg-panelAlt"
+      >
+        How Does This Game Work?
+      </button>
       <Link
         href="/stats"
-        className="rounded-md border border-border bg-panel px-3 py-1.5 text-xs text-gray-200 hover:bg-panelAlt"
+        className="justify-self-end rounded-md border border-border bg-panel px-3 py-1.5 text-xs text-gray-200 hover:bg-panelAlt"
       >
         Stats
       </Link>
