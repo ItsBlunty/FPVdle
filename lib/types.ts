@@ -37,3 +37,11 @@ export interface StatsDTO {
   percentSolved: number;
   averageClues: number | null;
 }
+
+export interface ArchiveItemDTO {
+  id: number;
+  number: number;
+  publishDate: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  totalClues: number;
+}

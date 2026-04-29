@@ -62,6 +62,21 @@ export function saveState(state: ClientState): void {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
+/**
+ * Save a play record without touching streak. Used for archive replays of
+ * past puzzles — completing a 2024 puzzle today shouldn't extend the streak.
+ */
+export function saveArchivePlay(
+  state: ClientState,
+  dateKey: string,
+  play: PlayRecord,
+): ClientState {
+  return {
+    ...state,
+    plays: { ...state.plays, [dateKey]: play },
+  };
+}
+
 export function recordCompletion(
   state: ClientState,
   dateKey: string,

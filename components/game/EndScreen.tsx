@@ -12,6 +12,12 @@ interface Props {
   result: PuzzleResultDTO;
   stats: StatsDTO | null;
   guesses: string[];
+  /** When false, hides the "Next puzzle in …" countdown (e.g. archive plays). */
+  showCountdown?: boolean;
+  /** Optional callback that, when provided, renders a "Reset Just For Fun" button. */
+  onResetForFun?: () => void;
+  /** When true, indicate that this is a practice attempt. */
+  practice?: boolean;
 }
 
 function buildShareText({
@@ -66,6 +72,9 @@ export default function EndScreen({
   result,
   stats,
   guesses,
+  showCountdown = true,
+  onResetForFun,
+  practice = false,
 }: Props) {
   const [copied, setCopied] = useState(false);
   const countdown = useCountdown();
@@ -129,7 +138,21 @@ export default function EndScreen({
         {copied ? 'Copied!' : 'Copy Result'}
       </button>
 
-      <div className="mt-6 text-xs text-muted">Next puzzle in {countdown}</div>
+      {onResetForFun && (
+        <div className="mt-5 border-t border-border pt-4">
+          <button
+            onClick={onResetForFun}
+            className="rounded-md border border-border bg-panelAlt px-4 py-2 text-sm font-medium text-gray-100 hover:bg-panel"
+          >
+            {practice ? 'Try Again Just For Fun' : 'Reset This Puzzle Just For Fun'}
+          </button>
+          <p className="mt-2 text-xs text-muted">
+            Note: Retrying a puzzle will not change your saved solve/failure.
+          </p>
+        </div>
+      )}
+
+      {showCountdown && <div className="mt-6 text-xs text-muted">Next puzzle in {countdown}</div>}
     </div>
   );
 }
