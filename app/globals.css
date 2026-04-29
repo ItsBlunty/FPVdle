@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #0d1117;
+  color: #c9d1d9;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+/* Strikethrough chip for wrong guesses */
+.guess-chip {
+  text-decoration: line-through;
+  text-decoration-color: #f85149;
+  text-decoration-thickness: 2px;
+}

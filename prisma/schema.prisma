@@ -1,0 +1,56 @@
+// FPVdle Prisma schema. See FPVdle-spec.md §5.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Diagnosis {
+  id          String   @id
+  name        String
+  category    String
+  aliases     String[]
+  description String?
+  createdAt   DateTime @default(now())
+  puzzles     Puzzle[]
+}
+
+model Puzzle {
+  id          Int       @id @default(autoincrement())
+  publishDate DateTime  @unique
+  answerId    String
+  answer      Diagnosis @relation(fields: [answerId], references: [id])
+  explanation String
+  difficulty  String
+  clues       Clue[]
+  plays       Play[]
+  createdAt   DateTime  @default(now())
+}
+
+model Clue {
+  id       Int    @id @default(autoincrement())
+  puzzleId Int
+  puzzle   Puzzle @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+  position Int
+  type     String
+  content  String
+  caption  String?
+
+  @@unique([puzzleId, position])
+}
+
+model Play {
+  id        Int      @id @default(autoincrement())
+  puzzleId  Int
+  puzzle    Puzzle   @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+  sessionId String
+  cluesUsed Int
+  solved    Boolean
+  createdAt DateTime @default(now())
+
+  @@unique([puzzleId, sessionId])
+}
