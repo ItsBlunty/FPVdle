@@ -23,8 +23,18 @@ export default function HomePage() {
   const [result, setResult] = useState<PuzzleResultDTO | null>(null);
   const [stats, setStats] = useState<StatsDTO | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
 
   const todayKey = useMemo(() => dateKey(), []);
+
+  useEffect(() => {
+    if (!showHelp) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowHelp(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showHelp]);
 
   // Bootstrap: load puzzle, diagnoses, and client state.
   useEffect(() => {
@@ -180,9 +190,11 @@ export default function HomePage() {
     return (
       <main className="mx-auto max-w-2xl p-6">
         <Header puzzleNumber={null} />
+        <HelpButton onClick={() => setShowHelp(true)} />
         <div className="rounded-lg border border-border bg-panel p-8 text-center text-muted">
           {error}
         </div>
+        {showHelp && <HelpDialog onClose={() => setShowHelp(false)} />}
       </main>
     );
   }
@@ -191,9 +203,11 @@ export default function HomePage() {
     return (
       <main className="mx-auto max-w-2xl p-6">
         <Header puzzleNumber={null} />
+        <HelpButton onClick={() => setShowHelp(true)} />
         <div className="rounded-lg border border-border bg-panel p-8 text-center text-muted">
           Loading today's puzzle…
         </div>
+        {showHelp && <HelpDialog onClose={() => setShowHelp(false)} />}
       </main>
     );
   }
@@ -204,6 +218,7 @@ export default function HomePage() {
   return (
     <main className="mx-auto max-w-2xl p-4 sm:p-6">
       <Header puzzleNumber={puzzle.number} />
+      <HelpButton onClick={() => setShowHelp(true)} />
 
       <div className="space-y-3">
         {visibleClues.map((c, i) => (
@@ -240,7 +255,69 @@ export default function HomePage() {
           )}
         </div>
       )}
+
+      {showHelp && <HelpDialog onClose={() => setShowHelp(false)} />}
     </main>
+  );
+}
+
+function HelpButton({ onClick }: { onClick: () => void }) {
+  return (
+    <div className="mb-5 flex justify-center">
+      <button
+        type="button"
+        onClick={onClick}
+        className="rounded-md border border-border bg-panel px-4 py-2 text-sm font-medium text-gray-100 hover:bg-panelAlt"
+      >
+        How Does This Game Work?
+      </button>
+    </div>
+  );
+}
+
+function HelpDialog({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="help-title"
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg rounded-lg border border-border bg-panel p-6 text-gray-100 shadow-xl"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-3 top-3 rounded-md px-2 py-1 text-sm text-muted hover:bg-panelAlt hover:text-gray-100"
+        >
+          ✕
+        </button>
+        <h2 id="help-title" className="mb-3 pr-8 text-lg font-semibold text-white">
+          How Does This Game Work?
+        </h2>
+        <p className="mb-3 text-sm leading-relaxed">
+          Welcome to FPVdle! This is a daily &ldquo;dle&rdquo; game where you have to guess the
+          diagnosis based off of increasingly less vague clues. You may not have enough
+          information on the first clue to get it for sure, just make your best guess and
+          you&rsquo;ll get another clue to help narrow things down!
+        </p>
+        <p className="text-sm leading-relaxed text-muted">
+          Heavily inspired by Doctordle.{' '}
+          <a
+            href="https://doctordle.org/doctordle/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-blue-400 underline hover:text-blue-300"
+          >
+            https://doctordle.org/doctordle/
+          </a>
+        </p>
+      </div>
+    </div>
   );
 }
 
